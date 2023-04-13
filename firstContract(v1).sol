@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.7.0;
+pragma solidity >=0.8.0;
 
 pragma experimental ABIEncoderV2;
 
@@ -39,15 +39,15 @@ contract SellApartment {
         sales.push(Sale(_id, _price, true, false,_amountInSeconds));
     }
 
-    function addNewEstate(uint _id, address _owner, uint _square, uint _lifetime) public {
+    function addNewEstate(address _owner, uint _square, uint _lifetime) public {
         require(msg.sender == admin);
-        estates.push(Estate(_id, _owner, _square, _lifetime));
+        estates.push(Estate(estates.length, _owner, _square, _lifetime));
     }
 
     function getMoneyToContract(uint _id) public payable {
         require(msg.sender != estates[_id].owner);
         require(sales[_id].onSale == true);
-        require(msg.value == sales[_id].price * (10**18));
+        require(msg.value == (sales[_id].price * 10**18));
         client = msg.sender;
         sales[_id].transferred = true;
     }
@@ -61,7 +61,7 @@ contract SellApartment {
 
     function addFromSale(uint _id) public {
         require(msg.sender == estates[_id].owner);
-        require(sales[_id].onSale == true);
+        require(sales[_id].onSale == false);
         sales[_id].onSale = true;
     }
 
@@ -85,4 +85,12 @@ contract SellApartment {
         sales[_id].amountInSeconds = 0;
     }
 
+
+    function checkEstate() public view returns (Estate[] memory){
+        return estates;
+    }
+
+    function checkSales() public view returns (Sale[] memory){
+        return sales;
+    }
 }
