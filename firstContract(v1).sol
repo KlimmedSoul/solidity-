@@ -18,7 +18,7 @@ contract SellApartment {
         uint id;
         uint price; 
         bool onSale;
-        bool statusGetClient;
+        address statusGetClient;
         bool transferred;
         uint amountInSeconds;
     }
@@ -29,14 +29,14 @@ contract SellApartment {
 
     constructor() {
         estates.push(Estate(0, 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4, 50, 7));
-        sales.push(Sale(0, 50, true, false, false,  300));
+        sales.push(Sale(0, 50, true, address(0), false, 300));
     }
 
 
     function getOnSale(uint _id, uint _price, uint _amountInSeconds) public  {
         require(estates[_id].owner == msg.sender);
         require(sales[_id].onSale == false);
-        sales.push(Sale(_id, _price, true, false, false,_amountInSeconds));
+        sales.push(Sale(_id, _price, true, address(0), false,_amountInSeconds));
     }
 
     function addNewEstate(address _owner, uint _square, uint _lifetime) public {
@@ -48,9 +48,8 @@ contract SellApartment {
         require(msg.sender != estates[_id].owner);
         require(sales[_id].onSale == true);
         require(msg.value == (sales[_id].price * 10**18));
-        require(sales[_id].statusGetClient == false); 
         client = msg.sender;
-        sales[_id].statusGetClient = true;
+        sales[_id].statusGetClient = msg.sender;
         sales[_id].transferred = true;
     }
 
