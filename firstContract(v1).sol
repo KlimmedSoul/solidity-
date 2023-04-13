@@ -33,7 +33,6 @@ contract SellApartment {
 
 
     function getOnSale(uint _id, uint _price, uint _amountInSeconds) public  {
-        // Много много проверок
         require(estates[_id].owner == msg.sender);
         require(sales[_id].onSale == false);
         sales.push(Sale(_id, _price, true, false,_amountInSeconds));
