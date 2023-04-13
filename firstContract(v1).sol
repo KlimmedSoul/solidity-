@@ -5,6 +5,7 @@ pragma experimental ABIEncoderV2;
 
 contract SellApartment {
     address admin = 0x5c6B0f7Bf3E7ce046039Bd8FABdfD3f9F5021678;
+    address client;
 
     struct Estate {
         uint id;
@@ -17,7 +18,7 @@ contract SellApartment {
         uint id;
         uint price; 
         bool onSale;
-        bool status;
+        bool statusGetClient;
         bool transferred;
         uint amountInSeconds;
     }
@@ -35,7 +36,7 @@ contract SellApartment {
     function getOnSale(uint _id, uint _price, uint _amountInSeconds) public  {
         require(estates[_id].owner == msg.sender);
         require(sales[_id].onSale == false);
-        sales.push(Sale(_id, _price, true, false,_amountInSeconds));
+        sales.push(Sale(_id, _price, true, false, false,_amountInSeconds));
     }
 
     function addNewEstate(address _owner, uint _square, uint _lifetime) public {
@@ -47,9 +48,9 @@ contract SellApartment {
         require(msg.sender != estates[_id].owner);
         require(sales[_id].onSale == true);
         require(msg.value == (sales[_id].price * 10**18));
-        require(sales[_id].status == false); 
+        require(sales[_id].statusGetClient == false); 
         client = msg.sender;
-        status = true;
+        sales[_id].statusGetClient = true;
         sales[_id].transferred = true;
     }
 
