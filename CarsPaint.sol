@@ -89,6 +89,9 @@ contract PaintingCar {
     function paintCar(bool agreement, uint _id_reg, string memory _color) public payable {
         require(checkMaster(msg.sender) == true, "u aren't a master");
         require(_regs[_id_reg].price > 0, "price isn't estimated");
+        require(_regs[_id_reg].paint == false, "car already painted");
+        require(_regs[_id_reg].addedOnPaint == true, "the car isn't being painted");
+        require(_regs[_id_reg].color == "none", "the car already painted");
         _regs[_id_reg].color = _color;
         _regs[_id_reg].paint = true;
     }
