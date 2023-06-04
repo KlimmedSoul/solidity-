@@ -90,6 +90,7 @@ contract PaintingCar {
         require(checkMaster(msg.sender) == true, "u aren't a master");
         require(_regs[_id_reg].price > 0, "price isn't estimated");
         _regs[_id_reg].color = _color;
+        _regs[_id_reg].paint = true;
     }
 
     function transferMoneyToContract(uint _id_reg, bool consent, uint _id_car) public payable {
