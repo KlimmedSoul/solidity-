@@ -7,6 +7,7 @@ contract PaintingCar {
         uint id_car; 
         string color;
         string brand;
+        string gos_num;
     }
 
     struct Masters {
@@ -29,17 +30,17 @@ contract PaintingCar {
     address admin = 0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB;
 
     constructor() {
-        _cars[0x5B38Da6a701c568545dCfcB03FcB875f56beddC4].push(Car(1, "black", "Mazda"));
-        _cars[0x5B38Da6a701c568545dCfcB03FcB875f56beddC4].push(Car(2, "white", "Toyota"));
+        _cars[0x5B38Da6a701c568545dCfcB03FcB875f56beddC4].push(Car(1, "black", "Mazda", "А232БВ"));
+        _cars[0x5B38Da6a701c568545dCfcB03FcB875f56beddC4].push(Car(2, "white", "Toyota", "А432БВ"));
         _masters[0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2] = (Masters("Logov", 12));
         _masters[0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db] = (Masters("Ratov", 15));
         _regs[1] = Registration("2020-10-15", false, false, 0, "none");
     }
 
-    function addNewCar(address _owner, uint _id_car, string memory _color, string memory _brand) public {
+    function addNewCar(address _owner, uint _id_car, string memory _color, string memory _brand, string memory _gos_num) public {
         require(msg.sender == admin, "u aren't an admin");
         require(checkCar(_owner, _id_car) == false, "There's already a car under this id");
-        _cars[_owner].push(Car(_id_car, _color, _brand));
+        _cars[_owner].push(Car(_id_car, _color, _brand, _gos_num));
     }
 
     // проверка на существование машины
@@ -91,7 +92,7 @@ contract PaintingCar {
         require(_regs[_id_reg].price > 0, "price isn't estimated");
         require(_regs[_id_reg].paint == false, "car already painted");
         require(_regs[_id_reg].addedOnPaint == true, "the car isn't being painted");
-        require(_regs[_id_reg].color == "none", "the car already painted");
+        require(keccak256(abi.encodedPacked(_regs[_id_reg].color)) == (keccak256(abi.encodedPacked("none")), "the car already painted");
         _regs[_id_reg].color = _color;
         _regs[_id_reg].paint = true;
     }
