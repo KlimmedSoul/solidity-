@@ -54,13 +54,13 @@ contract chooseStarosta {
     }
 
     function startVote(address firstCond, uint _endTime, string memory _group) public  {
-        // require(msg.sender == admin, "u aren't admin");
-        // require(_students[firstCond].age > 0, "stundet doesn't exist");
-        // for(uint i = 0; i < _votes.length; i++){
-        //     // require(keccak256(abi.encodePacked(_votes[i].group)) == keccak256(abi.encodePacked(_group)) && _votes[i].active == true, "voting already started in this group");
-        // }
-        address[] memory conds;
-        uint[] memory golosa;
+        require(msg.sender == admin, "u aren't admin");
+        require(_students[firstCond].age > 0, "stundet doesn't exist");
+        for(uint i = 0; i < _votes.length; i++){
+            require(keccak256(abi.encodePacked(_votes[i].group)) == keccak256(abi.encodePacked(_group)) && _votes[i].active == true, "voting already started in this group");
+        }
+        address[] memory conds = new address[](1);
+        uint[] memory golosa = new uint[](1);
         conds[0] = firstCond;
         golosa[0] = 0;
         _votes.push(Vote(conds, _group, block.timestamp, _endTime, true, golosa));
