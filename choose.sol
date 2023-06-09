@@ -46,6 +46,7 @@ contract chooseStarosta {
     function addCond(address cond, uint _idVote) public {
         require(msg.sender == admin, "u aren't admin");
         require(_votes[_idVote].active == true, "voting ended");
+        require(keccak256(abi.encodePacked(_students[_votes[_idVote].newStarosta[0]].group)) == keccak256(abi.encodePacked(_students[cond].group)), "wrong group");
         for(uint i = 0; i < _votes.length; i++) {
             require(cond != _votes[_idVote].newStarosta[i], "cond already exsists");
         }
@@ -77,8 +78,8 @@ contract chooseStarosta {
         require(_votes[_voteId].active == true, "vote already end");
         require(_students[msg.sender].vote == false, "u already vote");
         require(keccak256(abi.encodePacked(_students[msg.sender].group)) == keccak256(abi.encodePacked(_votes[_voteId].group)), "u aren't part of this group");
-        require(_votes[_voteId].amountInSeconds + _votes[_voteId].startTime < block.timestamp, "vote already ended");
-        _votes[_voteId].golosa[_condId]++;
+        require(_votes[_voteId].amountInSeconds + _votes[_voteId].startTime > block.timestamp, "vote already ended");
+        _votes[_voteId].golosa[_condId] += 1;
         _students[msg.sender].vote = true;
     }
 
